@@ -5,7 +5,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      REGISTRY_STORAGE_DELETE_ENABLE: "true"
+      REGISTRY_STORAGE_DELETE_ENABLED: "true"
     volumes:
       - registry-data:/var/lib/registry
 
