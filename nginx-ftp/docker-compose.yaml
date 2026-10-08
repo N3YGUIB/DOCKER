@@ -11,7 +11,7 @@ services:
       FTP_USER_PASS: test123
       FTP_USER_HOME: /home/ftptest
     volumes:
-      - web:/home/test
+      - web:/home/ftptest
 
   nginx:
     image: nginx:latest
