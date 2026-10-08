@@ -1,0 +1,27 @@
+services:
+  ftp:
+    image: stilliard/pure-ftpd
+    container_name: ftp
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    environment:
+      PUBLICHOST: "IP Hote HO ou Bridge"
+      FTP_USER_NAME: test
+      FTP_USER_PASS: test123
+      FTP_USER_HOME: /home/ftptest
+    volumes:
+      - web:/home/test
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - web:/usr/share/nginx/html
+    depends_on:
+      - ftp
+
+volumes:
+  web:

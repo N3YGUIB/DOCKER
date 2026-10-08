@@ -1,0 +1,26 @@
+services:
+  registry:
+    image: registry:2
+    container_name: registry
+    ports:
+      - "5000:5000"
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLE: "true"
+    volumes:
+      - registry-data:/var/lib/registry
+
+  registry-ui:
+    image: joxit/docker-registry-ui:latest
+    container_name: registry-ui
+    ports:
+      - "8081:80"
+    environment:
+      SINGLE_REGISTRY: "true"
+      REGISTRY_TITLE: "Registry Job 9"
+      DELETE_IMAGES: "true"
+      NGINX_PROXY_PASS_URL: "http://registry:5000"
+    depends_on:
+      - registry
+
+volumes:
+  registry-data:
