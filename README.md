@@ -15,8 +15,10 @@ Bureau/docker/
 │   └── Dockerfile
 ├── nginx-ftp/
 │   └── docker-compose.yaml
-└── registry/
-    └── docker-compose.yaml
+├── registry/
+│   └── docker-compose.yaml
+└── ssh-img/
+    └── Dockerfile
 ```
 
 Chaque commande se lance **depuis le dossier concerné** (`cd` d'abord).
@@ -138,9 +140,6 @@ Envoyer `index.html`, puis ouvrir `http://IP_DE_LA_VM:8080`.
 docker compose down
 ```
 
-> **À corriger dans le YAML** : le volume doit être monté sur le même dossier que `FTP_USER_HOME`.
-> Remplacer `web:/home/test` par `web:/home/ftptest`, puis `docker compose down` et `docker compose up -d`.
-
 ---
 
 ## 5. Registry local + interface web (Docker Compose)
@@ -175,9 +174,54 @@ docker pull localhost:5000/nginx-job-huit:1.0
 docker compose down
 ```
 
-> **À corriger dans le YAML** : la variable s'écrit `REGISTRY_STORAGE_DELETE_ENABLED` (avec un **D** final), sinon la suppression d'images depuis l'interface ne marche pas.
+---
+
+## 6. SSH (Dockerfile)
+
+Serveur SSH (sans image SSH existante).
+Compte `root`, mot de passe `root123`. Le port **2222** de la VM est redirigé vers le port 22 du conteneur.
+
+```bash
+cd ~/Bureau/docker/ssh_co
+docker build -t ssh-conteneur .
+docker run -d --name ssh-test -p 2222:22 ssh-conteneur
+docker ps
+```
+
+### Se connecter
+
+Depuis la VM :
+
+```bash
+ssh -p 2222 root@localhost
+```
+
+Depuis la machine hôte (IP de la VM) :
+
+```bash
+ssh -p 2222 root@192.168.100.128
+```
+
+Répondre `yes` à la première question, puis saisir le mot de passe `root123`.
+
+Vérifier qu'on est bien dans le conteneur :
+
+```bash
+hostname        # affiche l'ID du conteneur
+exit
+```
+
+### Arrêter et supprimer
+
+```bash
+docker rm -f ssh-test
+```
+
+> Si tu recrées le conteneur et que SSH affiche `REMOTE HOST IDENTIFICATION HAS CHANGED` :
+> `ssh-keygen -R "[localhost]:2222"`
 
 ---
+
 
 ## Commandes de contrôle
 
