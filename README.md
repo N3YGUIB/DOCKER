@@ -151,7 +151,7 @@ docker compose up -d
 docker compose ps
 ```
 
-- Registry : `http://localhost:5000/v2/_catalog`
+- Registry : `curl http://localhost:5000/v2/_catalog`
 - Interface web : `http://IP_DE_LA_VM:8081`
 
 ### Envoyer une image dans le registry
